@@ -17,7 +17,7 @@ public class CreateGroups {
         int countOfGroups = (countOfPeople-leftOvers)/sizeOfGroups;
 
 
-        //output the results
+        //output the results      MODIFY TO USE system.out.format INSTEAD
         if (leftOvers == 0){
             System.out.println("You can create " + countOfGroups + " groups and noone will be left out! Good job!");
         }else if (leftOvers == 1 ){
