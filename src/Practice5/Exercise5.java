@@ -9,7 +9,7 @@ public class Exercise5 {
         System.out.println(random(1,77));
         System.out.println(random(1,77));
         System.out.println(random(1,77));
-        
+
     }
 
     public static int random(int min, int max){
