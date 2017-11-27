@@ -7,8 +7,8 @@ public class Movement {
     private double amount = 0.0;
     private String account = "Not set";
 
-    public Movement(LocalDate date, double amount, String account) {
-        this.date = date;
+    public Movement(String date, double amount, String account) {
+        this.date = LocalDate.parse(date);
         this.amount = amount;
         this.account = account;
     }
