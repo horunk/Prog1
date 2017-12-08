@@ -7,8 +7,18 @@ public class Movement {
     private double amount = 0.0;
     private String account = "Not set";
 
+
+    private double balance;
+
     public Movement(String date, double amount, String account) {
         this.date = LocalDate.parse(date);
+        this.amount = amount;
+        this.account = account;
+    }
+
+    public Movement(LocalDate date, double amount, String account, double balance) {
+        this.balance = balance;
+        this.date = date;
         this.amount = amount;
         this.account = account;
     }
@@ -24,6 +34,10 @@ public class Movement {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    public void setBalance(double balance) { this.balance = balance; }
+
+    public double getBalance() { return balance; }
 
     public double getAmount() {
         return amount;
