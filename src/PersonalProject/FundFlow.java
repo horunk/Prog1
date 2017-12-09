@@ -8,10 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 public class FundFlow {
 
@@ -38,7 +35,7 @@ public class FundFlow {
         // Küsi kasutajalt algus ja lõppkuupäevad filtri jaoks, küsi kasutajalt account name
         fromDate = getFromDate();
         toDate = getToDate();
-        accountName = getAccount();
+        accountName = getAccount(fundData);
 
 
         //TODO: refactor to separate output
@@ -70,21 +67,44 @@ public class FundFlow {
         }
     }
 
-    private static String getAccount() {
-        while (true) {
-            String getAccount = "";
-            
-            
-            System.out.println("Insert the account name for fund flow:");
-            System.out.println("Following accounts were found in data file:");
+    private static String getAccount(ArrayList<Movement> fundData) {
+        String getAccount = "";
 
-            
 
-            getAccount = TextIO.getlnString();
-            
-            
-            return getAccount;
+        Set<String> uniqueAccounts = new HashSet<>();
+        for (Movement kirje : fundData
+                ) {
+            if(uniqueAccounts.contains(kirje.getAccount())){
+                continue;
+            }else{
+                uniqueAccounts.add(kirje.getAccount());
+            }
         }
+
+        while (true) {
+
+            System.out.print("Following accounts were found in data file: ");
+
+            for (String kirje : uniqueAccounts
+                 ) {
+                System.out.print(kirje + ", ");
+            }
+            System.out.println("");
+            System.out.println("Insert the account name for fund flow output:");
+
+            String getAccountInput = TextIO.getlnString();
+
+            if(uniqueAccounts.contains(getAccountInput)){
+                getAccount = getAccountInput;
+                break;
+            }else {
+                System.out.println("Inserted account was not found.");
+                continue;
+            }
+
+
+        }
+        return getAccount;
     }
 
     private static LocalDate getToDate() {
