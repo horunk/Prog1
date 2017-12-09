@@ -15,52 +15,76 @@ import java.util.HashMap;
 
 public class FundFlow {
 
+
     public static void main(String[] args) {
         //DONE TODO: create dummy data file for developement
         //DONE TODO: create module to read data from file to arraylist(?)
         //DONE TODO: create a out module to output the funds ordered by date
         //DONE TODO: add from and to date filters to out module
         //DONE:TODO: add a key-value pair class to store account names and initial balance
-        //TODO: create more accounts and add method to choose account to output
+        //DONE TODO: create more accounts and add method to choose account to output
         //TODO: create console interface
 
 
-        double balance = 0.0;
         LocalDate fromDate;
         LocalDate toDate;
+        String accountName = "";
+        ArrayList<String> accountList = new ArrayList<>();
 
         // loo uus arraylist
-        ArrayList<Movement> fundData2 = Initialize();
+        ArrayList<Movement> fundData = Initialize();
 
 
-        // loo uus arraylist
-        //  ArrayList<Movement> fundData = new ArrayList<>();
-
-        // loe failist ridu,
-        // String file = "C:\\Users\\horunk\\OneDrive - TTU\\Semester1\\Programmeerimise alused (ICS0004)\\dummydata.txt";
-        // ReadFromFileToArrayList(fundData, file);
-
-
+        // Küsi kasutajalt algus ja lõppkuupäevad filtri jaoks, küsi kasutajalt account name
         fromDate = getFromDate();
         toDate = getToDate();
+        accountName = getAccount();
 
 
-        //TODO: refactor
+        //TODO: refactor to separate output
 
-        for (Movement kirje : fundData2
+        generateOutput(fromDate, toDate, accountName, fundData);
+
+
+    }
+
+    private static void generateOutput(LocalDate fromDate, LocalDate toDate, String accountName, ArrayList<Movement> fundData) {
+        System.out.println("");
+        System.out.format("%-15s%15s%15s%15s\n",
+                "Date", "Amount", "Account", "Balance");
+        System.out.println("------------------------------------------------------------");
+
+        for (Movement kirje : fundData
                 ) {
-            //balance = balance + kirje.getAmount();
 
-            if (kirje.getDate().isAfter(fromDate) && kirje.getDate().isBefore(toDate)) {
-                // System.out.println(kirje.getDate() + " " + kirje.getAmount() + " " + kirje.getAccount());
-                System.out.format("%-15s%15.2f%15s%15.2f",
-                        kirje.getDate(), kirje.getAmount(), kirje.getAccount(), kirje.getBalance());
-                System.out.println("");
-            } else {
-                continue;
+            if (accountName.equalsIgnoreCase(kirje.getAccount())) {
+                if (kirje.getDate().isAfter(fromDate) && kirje.getDate().isBefore(toDate)) {
+                    // System.out.println(kirje.getDate() + " " + kirje.getAmount() + " " + kirje.getAccount());
+                    System.out.format("%-15s%15.2f%15s%15.2f",
+                            kirje.getDate(), kirje.getAmount(), kirje.getAccount(), kirje.getBalance());
+                    System.out.println("");
+                } else {
+                    continue;
+                }
             }
         }
+    }
 
+    private static String getAccount() {
+        while (true) {
+            String getAccount = "";
+            
+            
+            System.out.println("Insert the account name for fund flow:");
+            System.out.println("Following accounts were found in data file:");
+
+            
+
+            getAccount = TextIO.getlnString();
+            
+            
+            return getAccount;
+        }
     }
 
     private static LocalDate getToDate() {
@@ -109,7 +133,6 @@ public class FundFlow {
     private static ArrayList Initialize() {
 
 
-
         // loe failist read arraylisti
         //TODO: faili asukoht conf faili
         String file = "C:\\Users\\horunk\\OneDrive - TTU\\Semester1\\Programmeerimise alused (ICS0004)\\dummydata.txt";
@@ -132,7 +155,7 @@ public class FundFlow {
                 int instance = Integer.parseInt(splitData[0]);
                 String date = splitData[1];
                 Double amount = Double.parseDouble(splitData[2]);
-                String account = splitData[3].replaceAll("\\s","");
+                String account = splitData[3].replaceAll("\\s", "");
 
                 fundData.add(new Movement(date, amount, account));
 
@@ -164,15 +187,15 @@ public class FundFlow {
         HashMap<String, Double> Balances = new HashMap<String, Double>();
 
         for (Movement transaction : fundData
-             ) {
-            if (Balances.containsKey(transaction.getAccount())){
+                ) {
+            if (Balances.containsKey(transaction.getAccount())) {
                 double curBalance = Balances.get(transaction.getAccount());
-                Balances.replace(transaction.getAccount(),curBalance += transaction.getAmount());
-            }else{
-                Balances.put(transaction.getAccount(),transaction.getAmount());
+                Balances.replace(transaction.getAccount(), curBalance += transaction.getAmount());
+            } else {
+                Balances.put(transaction.getAccount(), transaction.getAmount());
             }
 
-            FundDataWBalance.add(new Movement(transaction.getDate(),transaction.getAmount(),transaction.getAccount(), Balances.get(transaction.getAccount())));
+            FundDataWBalance.add(new Movement(transaction.getDate(), transaction.getAmount(), transaction.getAccount(), Balances.get(transaction.getAccount())));
         }
 
 
