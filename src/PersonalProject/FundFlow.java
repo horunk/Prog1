@@ -43,7 +43,7 @@ public class FundFlow {
         // Show menu for options
         generateMenu(fundData);
         do{
-            clearConsole();
+
             generateMenu(fundData);
         } while (true);
     }
@@ -54,7 +54,6 @@ public class FundFlow {
      * @param fundData
      */
     private static void generateMenu(ArrayList<Movement> fundData) {
-        clearConsole();
         System.out.println("Please insert number from list for action: ");
         System.out.println("1 - Generate detailed funds output");
         System.out.println("9 - Exit the program");
@@ -71,7 +70,7 @@ public class FundFlow {
                 System.exit(0);
                 break;
             default:
-                System.out.println("Selected option not available, please select again");
+                System.out.println("\n\nSelected option not available, please make new selection:\n");
                 break;
         }
     }
@@ -329,7 +328,8 @@ public class FundFlow {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Configuration file not found.");
+            System.out.println("Configuration file not found. Check if you have config file (conf.txt) at: ");
+            System.out.println(config);
             System.exit(1);
         }
 
@@ -367,6 +367,7 @@ public class FundFlow {
 
         } catch (IOException e) {
             System.out.println("Input file not found.");
+            System.out.println("Check data file location configuration from config file (conf.txt)");
             System.exit(1);
         }
 
