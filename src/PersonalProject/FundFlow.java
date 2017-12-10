@@ -1,15 +1,17 @@
 package PersonalProject;
 
 import Practice2.TextIO;
-import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
-
-import javax.xml.soap.Text;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FundFlow {
 
@@ -41,7 +43,7 @@ public class FundFlow {
             generateMenu(fundData);
         } while (true);
 
-        
+
 
     }
 
@@ -54,9 +56,11 @@ public class FundFlow {
         int showMenuOptions = TextIO.getlnInt();
         switch (showMenuOptions) {
             case 1:
+                clearConsole();
                 detailedOutput(fundData);
                 break;
             case 9:
+                clearConsole();
                 System.out.println("Thank you for using Fundflow");
                 System.exit(0);
                 break;
@@ -69,7 +73,7 @@ public class FundFlow {
     private static void detailedOutput(ArrayList<Movement> fundData) {
         LocalDate fromDate;
         LocalDate toDate;
-        String accountName;// Küsi kasutajalt algus ja lõppkuupäevad filtri jaoks, küsi kasutajalt account name
+        String accountName;
         fromDate = getFromDate();
         toDate = getToDate();
         accountName = getAccount(fundData);
@@ -160,6 +164,7 @@ public class FundFlow {
                 }
             }
         }
+        System.out.println("\n");
         promptEnterKeyandCLR();
     }
 
@@ -179,7 +184,7 @@ public class FundFlow {
 
         while (true) {
 
-            System.out.print("Following accounts were found in data file: ");
+            System.out.print("\nFollowing accounts were found in data file: ");
 
             for (String kirje : uniqueAccounts
                  ) {
@@ -194,7 +199,7 @@ public class FundFlow {
                 getAccount = getAccountInput;
                 break;
             }else {
-                System.out.println("Inserted account was not found.");
+                System.out.println("Inserted account was not found.\n");
                 continue;
             }
 
@@ -207,7 +212,7 @@ public class FundFlow {
         LocalDate toDate;
         while (true) {
             try {
-                System.out.println("Insert TO date (YYYY-MM-DD) or empty line for today's date + 6 months: ");
+                System.out.println("\nInsert TO date (YYYY-MM-DD) or empty line for today's date + 6 months: ");
                 String toDateInput = TextIO.getlnString();
                 if (toDateInput.equals("") || toDateInput.isEmpty()) {
                     toDate = LocalDate.now().plusMonths(3);
@@ -219,7 +224,7 @@ public class FundFlow {
                 }
             } catch (DateTimeParseException e) {
                 // Throw invalid date message
-                System.out.println("Invalid date format, use YYYY-MM-DD");
+                System.out.println("\nInvalid date format, use YYYY-MM-DD");
             }
         }
         return toDate;
@@ -230,7 +235,7 @@ public class FundFlow {
         while (true) {
 
             try {
-                System.out.println("Insert FROM date (YYYY-MM-DD) or empty line for today's date: ");
+                System.out.println("\nInsert FROM date (YYYY-MM-DD) or empty line for today's date: ");
                 String fromDateInput = TextIO.getlnString();
                 if (fromDateInput.equals("") || fromDateInput.isEmpty()) {
                     fromDate = LocalDate.now();
@@ -242,7 +247,7 @@ public class FundFlow {
                 }
             } catch (DateTimeParseException e) {
                 // Throw invalid date message
-                System.out.println("Invalid date format, use YYYY-MM-DD");
+                System.out.println("\nInvalid date format, use YYYY-MM-DD");
             }
         }
         return fromDate;
