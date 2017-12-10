@@ -1,0 +1,7 @@
+# datapath is the file path to file containing fund movements in the following format:
+# id,date,amount,account
+# id = unique id, next id should be new max id
+# date format should be YYYY-MM-DD
+# amount = amount can be positive and negative, decimals separated with .
+# account = account name where the fund movement belongs to
+datapath=C:\\Users\\horunk\\OneDrive - TTU\\Semester1\\Programmeerimise alused (ICS0004)\\dummydata.txt

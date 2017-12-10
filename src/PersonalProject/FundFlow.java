@@ -61,7 +61,7 @@ public class FundFlow {
                 break;
             case 9:
                 clearConsole();
-                System.out.println("Thank you for using Fundflow");
+                System.out.println("Thank you for using FundFlow");
                 System.exit(0);
                 break;
             default:
@@ -255,10 +255,35 @@ public class FundFlow {
 
     private static ArrayList Initialize() {
 
+        String file = "";
+        //String config = "C:\\Users\\horunk\\OneDrive - TTU\\Semester1\\Programmeerimise alused (ICS0004)\\Prog1\\src\\PersonalProject\\conf.txt";
+        String config = ".\\src\\PersonalProject\\conf.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(config))) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+
+                if (line.startsWith("#")){
+                }else{
+                    String[] splitData = line.split("=");
+
+                    String key = splitData[0];
+                    String value = splitData[1];
+                    if (key.equalsIgnoreCase("datapath")){
+                        file = value;
+                    }
+                }
+            }
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Configuration file not found.");
+            System.exit(1);
+        }
 
         // loe failist read arraylisti
-        //TODO: faili asukoht conf faili
-        String file = "C:\\Users\\horunk\\OneDrive - TTU\\Semester1\\Programmeerimise alused (ICS0004)\\dummydata.txt";
         ArrayList<Movement> fundDataTemp = ReadFromFileToArrayList(file);
 
 
