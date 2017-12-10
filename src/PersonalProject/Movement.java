@@ -2,6 +2,11 @@ package PersonalProject;
 
 import java.time.LocalDate;
 
+/**
+ * Class used for ArrayLists to store initial and processed data.
+ * Initial data is stored with the constructor with 3 variables.
+ * Processed data is used with constructor where balance is added.
+ */
 public class Movement {
     private LocalDate date = LocalDate.parse("2017-01-01");
     private double amount = 0.0;

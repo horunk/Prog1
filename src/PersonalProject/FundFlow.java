@@ -13,40 +13,46 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ *<h1>FundFlow</h1>
+ * The FundFlow program is ment to help with giving insight into future balance and fund movements of several accounts.
+ *
+ *
+ * @author  Holger R
+ * @version 0.1
+ * @since   2017-12-10
+ */
+
 public class FundFlow {
 
 
     public static void main(String[] args) {
-        //DONE TODO: create dummy data file for developement
-        //DONE TODO: create module to read data from file to arraylist(?)
-        //DONE TODO: create a out module to output the funds ordered by date
-        //DONE TODO: add from and to date filters to out module
-        //DONE:TODO: add a key-value pair class to store account names and initial balance
-        //DONE TODO: create more accounts and add method to choose account to output
-        //TODO: create console interface
-        //TODO Hello info at startup
-
-
+        // Declare basic variables
         LocalDate fromDate;
         LocalDate toDate;
         String accountName = new String();
         ArrayList<String> accountList = new ArrayList<>();
 
-        // loo uus arraylist
+        // Call initialize to load configuration and data, do first processing
         ArrayList<Movement> fundData = Initialize();
 
+        // Display welcome information
         printHelloText();
 
+        // Show menu for options
         generateMenu(fundData);
         do{
             clearConsole();
             generateMenu(fundData);
         } while (true);
-
-
-
     }
 
+
+    /**
+     * This method generates options menu for the user. E.g. to invoke generate output method or to exit program.
+     * @param fundData
+     */
     private static void generateMenu(ArrayList<Movement> fundData) {
         clearConsole();
         System.out.println("Please insert number from list for action: ");
@@ -70,6 +76,12 @@ public class FundFlow {
         }
     }
 
+
+    /**
+     * This method is used to get user input for generateDetailedOutput method. From and To dates and Account name are required from user.
+     * After getting input the {@link #generateDetailedOutput(LocalDate, LocalDate, String, ArrayList)} is called to generate output.
+     * @param fundData
+     */
     private static void detailedOutput(ArrayList<Movement> fundData) {
         LocalDate fromDate;
         LocalDate toDate;
@@ -81,6 +93,11 @@ public class FundFlow {
         generateDetailedOutput(fromDate, toDate, accountName, fundData);
     }
 
+
+    /**
+     * This method creates the first banner message shown on startup.
+     * Displaying program name, author and version.
+     */
     private static void printHelloText() {
         ArrayList<String> helloPage = new ArrayList<>();
         helloPage.add("");
@@ -130,6 +147,9 @@ public class FundFlow {
         promptEnterKeyandCLR();
     }
 
+    /**
+     * This method is used to make the program pause until users presses "Enter" key.
+     */
     private static void promptEnterKeyandCLR(){
         System.out.println("Press \"ENTER\" to continue...");
         try {
@@ -140,10 +160,21 @@ public class FundFlow {
         clearConsole();
     }
 
+    /**
+     * This method is used to "clear" console - currently by printing 50 new lines
+     */
     private static void clearConsole(){
         for (int i = 0; i < 50; ++i) System.out.println();
     }
 
+    /**
+     * This method is used to generate table like formatted output for the detailed fund movement data.
+     * The method uses user input from method {@link #detailedOutput(ArrayList)}
+     * @param fromDate From date used for filtering movements
+     * @param toDate To date used for filtering movements
+     * @param accountName Account name used for filtering movements
+     * @param fundData The dataset being used
+     */
     private static void generateDetailedOutput(LocalDate fromDate, LocalDate toDate, String accountName, ArrayList<Movement> fundData) {
         System.out.println("");
         System.out.format("%-15s%15s%15s%15s\n",
@@ -168,6 +199,12 @@ public class FundFlow {
         promptEnterKeyandCLR();
     }
 
+
+    /**
+     * Method used to get user input for account name. Used in method {@link #detailedOutput(ArrayList)}
+     * @param fundData
+     * @return returns value from user input
+     */
     private static String getAccount(ArrayList<Movement> fundData) {
         String getAccount = "";
 
@@ -208,6 +245,11 @@ public class FundFlow {
         return getAccount;
     }
 
+
+    /**
+     * Method used to get user input for To date. Used in method {@link #detailedOutput(ArrayList)}
+     * @return returns value from user input
+     */
     private static LocalDate getToDate() {
         LocalDate toDate;
         while (true) {
@@ -230,6 +272,11 @@ public class FundFlow {
         return toDate;
     }
 
+
+    /**
+     * Method used to get user input for From date. Used in method {@link #detailedOutput(ArrayList)}
+     * @return returns value from user input
+     */
     private static LocalDate getFromDate() {
         LocalDate fromDate;
         while (true) {
@@ -253,6 +300,11 @@ public class FundFlow {
         return fromDate;
     }
 
+    /**
+     * Method used to load configuration from config file.
+     * Invoking method {@link #ReadFromFileToArrayList(String)} to read data from datafile and doing first processing.
+     * @return returns temp dataset as ArrayList
+     */
     private static ArrayList Initialize() {
 
         String file = "";
@@ -260,10 +312,8 @@ public class FundFlow {
         String config = ".\\src\\PersonalProject\\conf.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(config))) {
-
             String line;
             while ((line = br.readLine()) != null) {
-
                 if (line.startsWith("#")){
                 }else{
                     String[] splitData = line.split("=");
@@ -283,13 +333,18 @@ public class FundFlow {
             System.exit(1);
         }
 
-        // loe failist read arraylisti
         ArrayList<Movement> fundDataTemp = ReadFromFileToArrayList(file);
-
 
         return fundDataTemp;
     }
 
+    /**
+     * Method invoked by {@link #Initialize()}. This method reads fund movement data from file and do first processing.
+     * Sorting data from input and calculating balances. The balance data is saved in the hashmap.
+     *
+     * @param file The file path read from config file and used to load data for processing.
+     * @return returns data as new ArrayList which also includes calculated balance values.
+     */
     private static ArrayList<Movement> ReadFromFileToArrayList(String file) {
 
         ArrayList<Movement> fundData = new ArrayList<>();
