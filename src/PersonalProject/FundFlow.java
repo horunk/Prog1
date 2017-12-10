@@ -3,6 +3,7 @@ package PersonalProject;
 import Practice2.TextIO;
 import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
 
+import javax.xml.soap.Text;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,31 +22,125 @@ public class FundFlow {
         //DONE:TODO: add a key-value pair class to store account names and initial balance
         //DONE TODO: create more accounts and add method to choose account to output
         //TODO: create console interface
+        //TODO Hello info at startup
 
 
         LocalDate fromDate;
         LocalDate toDate;
-        String accountName = "";
+        String accountName = new String();
         ArrayList<String> accountList = new ArrayList<>();
 
         // loo uus arraylist
         ArrayList<Movement> fundData = Initialize();
 
+        printHelloText();
 
-        // Küsi kasutajalt algus ja lõppkuupäevad filtri jaoks, küsi kasutajalt account name
+        generateMenu(fundData);
+        do{
+            clearConsole();
+            generateMenu(fundData);
+        } while (true);
+
+        
+
+    }
+
+    private static void generateMenu(ArrayList<Movement> fundData) {
+        clearConsole();
+        System.out.println("Please insert number from list for action: ");
+        System.out.println("1 - Generate detailed funds output");
+        System.out.println("9 - Exit the program");
+
+        int showMenuOptions = TextIO.getlnInt();
+        switch (showMenuOptions) {
+            case 1:
+                detailedOutput(fundData);
+                break;
+            case 9:
+                System.out.println("Thank you for using Fundflow");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Selected option not available, please select again");
+                break;
+        }
+    }
+
+    private static void detailedOutput(ArrayList<Movement> fundData) {
+        LocalDate fromDate;
+        LocalDate toDate;
+        String accountName;// Küsi kasutajalt algus ja lõppkuupäevad filtri jaoks, küsi kasutajalt account name
         fromDate = getFromDate();
         toDate = getToDate();
         accountName = getAccount(fundData);
 
-
-        //TODO: refactor to separate output
-
-        generateOutput(fromDate, toDate, accountName, fundData);
-
-
+        generateDetailedOutput(fromDate, toDate, accountName, fundData);
     }
 
-    private static void generateOutput(LocalDate fromDate, LocalDate toDate, String accountName, ArrayList<Movement> fundData) {
+    private static void printHelloText() {
+        ArrayList<String> helloPage = new ArrayList<>();
+        helloPage.add("");
+        helloPage.add("Welcome to FundFlow program");
+        helloPage.add("");
+        helloPage.add("This program is made to allow you to get an ");
+        helloPage.add("insight into your future funds by accounts.");
+        helloPage.add("");
+        helloPage.add("Version 0.1");
+        helloPage.add("by: Holger R / horunk@github.com");
+        helloPage.add("");
+
+        int longestRow = 0;
+        int countOfRows = 0;
+        for (String row : helloPage
+             ) {
+            if (row.length() > longestRow){
+                longestRow = row.length();
+            }
+            countOfRows = countOfRows +1;
+        }
+
+        for (int i = 0; i < longestRow + 10; i++) {
+        System.out.print("#");
+           }
+        ;
+        System.out.println("");
+
+        for (String row : helloPage
+             ) {
+        System.out.print("#");
+        for (int i = 0; i < ((longestRow-row.length())/2+4); i++) {
+            System.out.print(" ");
+        }
+        System.out.print(row);
+        for (int i = 0; i < (((longestRow-row.length())/2+4)+row.length()%2); i++) {
+            System.out.print(" ");
+        }
+        System.out.print("#\n");
+           }
+
+        for (int i = 0; i < longestRow + 10; i++) {
+        System.out.print("#");
+           }
+        ;
+        System.out.println("\n\n");
+        promptEnterKeyandCLR();
+    }
+
+    private static void promptEnterKeyandCLR(){
+        System.out.println("Press \"ENTER\" to continue...");
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        clearConsole();
+    }
+
+    private static void clearConsole(){
+        for (int i = 0; i < 50; ++i) System.out.println();
+    }
+
+    private static void generateDetailedOutput(LocalDate fromDate, LocalDate toDate, String accountName, ArrayList<Movement> fundData) {
         System.out.println("");
         System.out.format("%-15s%15s%15s%15s\n",
                 "Date", "Amount", "Account", "Balance");
@@ -65,6 +160,7 @@ public class FundFlow {
                 }
             }
         }
+        promptEnterKeyandCLR();
     }
 
     private static String getAccount(ArrayList<Movement> fundData) {
@@ -115,6 +211,7 @@ public class FundFlow {
                 String toDateInput = TextIO.getlnString();
                 if (toDateInput.equals("") || toDateInput.isEmpty()) {
                     toDate = LocalDate.now().plusMonths(3);
+                    System.out.println("Using date: " + toDate + "\n");
                     break;
                 } else {
                     toDate = LocalDate.parse(toDateInput);
@@ -137,6 +234,7 @@ public class FundFlow {
                 String fromDateInput = TextIO.getlnString();
                 if (fromDateInput.equals("") || fromDateInput.isEmpty()) {
                     fromDate = LocalDate.now();
+                    System.out.println("Using date: " + fromDate + "\n");
                     break;
                 } else {
                     fromDate = LocalDate.parse(fromDateInput);
